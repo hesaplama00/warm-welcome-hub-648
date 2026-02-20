@@ -1,7 +1,10 @@
 {
-  "functions": {
-    "api/proxy.ts": {
-      "runtime": "edge"
-    }
-  }
+  "version": 2
 }
+```
+
+Kaydedip push et:
+```
+git add .
+git commit -m "proxy js yapıldı"
+git push
