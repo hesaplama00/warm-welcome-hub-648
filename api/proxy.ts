@@ -1,12 +1,22 @@
-export default async function handler(req: any, res: any) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET");
-
-  try {
-    const response = await fetch("https://www.amasyakuyumculardernegi.com/");
-    const html = await response.text();
-    res.status(200).json({ contents: html });
-  } catch (error) {
-    res.status(500).json({ error: "Veri çekilemedi" });
-  }
+export const config = {
+  runtime: 'edge',
 }
+
+export default async function handler(request: Request) {
+  const response = await fetch("https://www.amasyakuyumculardernegi.com/");
+  const html = await response.text();
+  
+  return new Response(JSON.stringify({ contents: html }), {
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    },
+  });
+}
+```
+
+Kaydedince CMD'de:
+```
+git add .
+git commit -m "proxy guncellendi"
+git push
