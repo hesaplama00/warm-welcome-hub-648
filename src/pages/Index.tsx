@@ -45,17 +45,17 @@ const Index = () => {
           {/* Price Table */}
           <div className="rounded-2xl border border-gold/20 bg-card overflow-hidden shadow-lg">
             {/* Table header */}
-            <div className="flex items-center px-4 py-2 bg-secondary/60 border-b border-gold/20">
-              <div className="flex-1">
+            <div className="flex items-center px-3 py-2 bg-secondary/60 border-b border-gold/20">
+              <div className="w-[130px] shrink-0">
                 <div className="flex items-center gap-1.5">
                   <div className="w-1 h-3.5 gold-gradient rounded-full" />
-                  <span className="text-[11px] font-bold text-foreground tracking-wide uppercase">Amasya Tavsiye Fiyatları</span>
+                  <span className="text-[10px] font-bold text-foreground tracking-wide uppercase">Tavsiye Fiyatları</span>
                 </div>
               </div>
-              <div className="grid grid-cols-3 text-right" style={{ minWidth: 210 }}>
-                <span className="px-2 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Alış</span>
-                <span className="px-2 text-[10px] font-semibold text-primary uppercase tracking-wider border-x border-gold/15">Satış</span>
-                <span className="pl-2 text-[10px] font-semibold text-accent uppercase tracking-wider">İsk.</span>
+              <div className="grid grid-cols-3 text-right flex-1">
+                <span className="px-1 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Alış</span>
+                <span className="px-1 text-[10px] font-semibold text-primary uppercase tracking-wider border-x border-gold/15">Satış</span>
+                <span className="pl-1 text-[10px] font-semibold text-accent uppercase tracking-wider">İsk.</span>
               </div>
             </div>
 
