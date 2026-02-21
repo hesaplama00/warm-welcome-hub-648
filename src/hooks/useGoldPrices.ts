@@ -1,23 +1,22 @@
 import { useState, useEffect } from "react";
 
-const PROXY_URL = "https://amasya-altin-fiyatlari.vercel.app/api/proxy?url=";
-const TARGET_URL = "";
+const SUPABASE_URL = "https://hnfgjzchlpdhektgnwwi.supabase.co/functions/v1/dynamic-service";
 
 export const useGoldPrices = () => {
   const [prices, setPrices] = useState([
-    { id: "bilezik", name: "22 Ayar Bilezik", buying: "...", selling: "...", discountSelling: "...", trend: "stable" as const, icon: "🔿" },
-    { id: "gram", name: "24 Gram Altın", buying: "...", selling: "...", discountSelling: "...", trend: "stable" as const, icon: "🅰" },
+    { id: "bilezik", name: "22 Ayar Bilezik", buying: "...", selling: "...", discountSelling: "...", trend: "stable" as const, icon: "📿" },
+    { id: "gram", name: "24 Gram Altın", buying: "...", selling: "...", discountSelling: "...", trend: "stable" as const, icon: "🏅" },
     { id: "ceyrek", name: "Çeyrek Altın", buying: "...", selling: "...", discountSelling: "...", trend: "stable" as const, icon: "🪙" },
     { id: "yarim", name: "Yarım Altın", buying: "...", selling: "...", discountSelling: "...", trend: "stable" as const, icon: "💰" },
-    { id: "lira", name: "Cumhuriyet Lirası", buying: "...", selling: "...", discountSelling: "...", trend: "stable" as const, icon: "🆔" },
-    { id: "arma", name: "Arma Altın", buying: "...", selling: "...", discountSelling: "...", trend: "stable" as const, icon: "▪️" },
+    { id: "lira", name: "Cumhuriyet Lirası", buying: "...", selling: "...", discountSelling: "...", trend: "stable" as const, icon: "🏆" },
+    { id: "arma", name: "Arma Altın", buying: "...", selling: "...", discountSelling: "...", trend: "stable" as const, icon: "⭐" },
   ]);
   const [updateTime, setUpdateTime] = useState("-");
   const [loading, setLoading] = useState(true);
 
   const fetchPrices = async () => {
     try {
-      const res = await fetch(PROXY_URL);
+      const res = await fetch(SUPABASE_URL);
       const data = await res.json();
       const html = data.contents;
 
@@ -29,11 +28,11 @@ export const useGoldPrices = () => {
 
       rows.forEach((row) => {
         const cells = row.querySelectorAll("td");
-        if (cells.length >= 3) {
+        if (cells.length >= 2) {
           const label = cells[0].textContent?.trim() || "";
           const buying = cells[1].textContent?.trim() || "";
-          const selling = cells[2].textContent?.trim() || "";
-          const discount = cells[3]?.textContent?.trim() || "";
+          const selling = cells[2]?.textContent?.trim() || "";
+          const discount = cells[3]?.textContent?.trim() || selling;
 
           if (label.includes("22 Ayar")) priceMap["bilezik"] = { buying, selling, discount };
           if (label.includes("24 Gram")) priceMap["gram"] = { buying, selling, discount };
@@ -47,7 +46,13 @@ export const useGoldPrices = () => {
       setPrices((prev) =>
         prev.map((p) =>
           priceMap[p.id]
-            ? { ...p, buying: priceMap[p.id].buying + " ₺", selling: priceMap[p.id].selling + " ₺", discountSelling: priceMap[p.id].discount + " ₺", trend: "up" as const }
+            ? {
+                ...p,
+                buying: Number(priceMap[p.id].buying).toLocaleString("tr-TR") + " ₺",
+                selling: Number(priceMap[p.id].selling).toLocaleString("tr-TR") + " ₺",
+                discountSelling: Number(priceMap[p.id].discount).toLocaleString("tr-TR") + " ₺",
+                trend: "up" as const
+              }
             : p
         )
       );

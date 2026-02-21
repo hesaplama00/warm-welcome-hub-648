@@ -1,18 +1,8 @@
-import { useState } from "react";
 import GoldPriceCard from "@/components/GoldPriceCard";
 import AdBanner from "@/components/AdBanner";
 import Header from "@/components/Header";
 import { Calculator, Star, Home, BarChart2, Bell, Info } from "lucide-react";
-
-const goldPrices = [
-  { id: "bilezik", name: "22 Ayar Bilezik", buying: "6.630 ₺", selling: "7.277 ₺", discountSelling: "6.930 ₺", trend: "up" as const, icon: "📿" },
-  { id: "gram", name: "24 Gram Altın", buying: "7.230 ₺", selling: "7.823 ₺", discountSelling: "7.450 ₺", trend: "up" as const, icon: "🏅" },
-  { id: "ceyrek", name: "Çeyrek Altın", buying: "11.640 ₺", selling: "12.747 ₺", discountSelling: "12.140 ₺", trend: "up" as const, icon: "🪙" },
-  { id: "yarim", name: "Yarım Altın", buying: "23.280 ₺", selling: "25.494 ₺", discountSelling: "24.280 ₺", trend: "up" as const, icon: "💰" },
-  { id: "lira", name: "Cumhuriyet Lirası", buying: "46.560 ₺", selling: "50.988 ₺", discountSelling: "48.560 ₺", trend: "up" as const, icon: "🏆" },
-  { id: "arma", name: "Arma Altın", buying: "116.400 ₺", selling: "127.470 ₺", discountSelling: "121.400 ₺", trend: "up" as const, icon: "⭐" },
-  { id: "ata", name: "Ata Altın", buying: "47.950 ₺", selling: "52.122 ₺", discountSelling: "49.640 ₺", trend: "up" as const, icon: "🎖️" },
-];
+import { useGoldPrices } from "@/hooks/useGoldPrices";
 
 const navItems = [
   { icon: Home, label: "Ana Sayfa", active: true },
@@ -22,29 +12,17 @@ const navItems = [
 ];
 
 const Index = () => {
-  const [updateTime, setUpdateTime] = useState("20.02.2026 03:57:01");
-  const [isLive] = useState(true);
-
-  const handleRefresh = () => {
-    const now = new Date();
-    setUpdateTime(now.toLocaleString("tr-TR", {
-      day: "2-digit", month: "2-digit", year: "numeric",
-      hour: "2-digit", minute: "2-digit", second: "2-digit",
-    }));
-  };
+  const { prices, updateTime, loading, fetchPrices } = useGoldPrices();
 
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-md mx-auto relative">
-        <Header updateTime={updateTime} isLive={isLive} onRefresh={handleRefresh} />
+        <Header updateTime={updateTime} isLive={!loading} onRefresh={fetchPrices} />
 
         <div className="pb-24 pt-3 space-y-4 px-4">
-          {/* Ad Banner */}
           <AdBanner />
 
-          {/* Price Table */}
           <div className="rounded-2xl border border-gold/20 bg-card overflow-hidden shadow-lg">
-            {/* Table header */}
             <div className="flex items-center px-3 py-2 bg-secondary/60 border-b border-gold/20">
               <div className="w-[130px] shrink-0">
                 <div className="flex items-center gap-1.5">
@@ -59,20 +37,21 @@ const Index = () => {
               </div>
             </div>
 
-            {/* Rows */}
-            {goldPrices.map((gold) => (
-              <GoldPriceCard key={gold.id} {...gold} />
-            ))}
+            {loading ? (
+              <div className="p-6 text-center text-sm text-muted-foreground">Fiyatlar yükleniyor...</div>
+            ) : (
+              prices.map((gold) => (
+                <GoldPriceCard key={gold.id} {...gold} />
+              ))
+            )}
           </div>
 
-          {/* Divider */}
           <div className="flex items-center gap-3 px-1">
             <div className="flex-1 h-px bg-gold/10" />
             <Star size={10} className="text-primary/60" />
             <div className="flex-1 h-px bg-gold/10" />
           </div>
 
-          {/* Calculator promo */}
           <div className="rounded-2xl border border-gold/20 bg-card p-4 flex items-center gap-4 hover:border-gold/40 transition-colors cursor-pointer">
             <div className="w-9 h-9 rounded-xl gold-gradient flex items-center justify-center shrink-0">
               <Calculator size={16} className="text-background" />
@@ -84,13 +63,11 @@ const Index = () => {
             <div className="ml-auto text-muted-foreground/40 text-lg">›</div>
           </div>
 
-          {/* Second ad slot */}
           <div className="rounded-2xl border border-dashed border-gold/20 p-4 text-center bg-card/30 hover:bg-card/60 transition-colors cursor-pointer">
             <p className="text-xs text-muted-foreground">📢 Reklam alanı</p>
             <p className="text-[10px] text-primary/80 mt-0.5">Kuyumcu reklamınızı buraya ekletin</p>
           </div>
 
-          {/* Info note */}
           <div className="rounded-xl bg-secondary/40 border border-gold/10 px-4 py-3">
             <p className="text-[11px] text-muted-foreground leading-relaxed text-center">
               ⚠️ Fiyatlar bilgi amaçlıdır. Güncel fiyat için kuyumcunuza danışınız.
@@ -100,7 +77,6 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Bottom navigation */}
         <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md z-30">
           <div className="bg-card/95 backdrop-blur-xl border-t border-gold/15 px-6 pt-3 pb-5">
             <div className="flex justify-around">
