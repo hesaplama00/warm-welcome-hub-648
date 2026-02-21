@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import GoldPriceCard from "@/components/GoldPriceCard";
 import AdBanner from "@/components/AdBanner";
 import Header from "@/components/Header";
-import { Calculator, Star, Home, BarChart2, Bell, Info } from "lucide-react";
+import { Star, Home, BarChart2, Bell, Info } from "lucide-react";
 
 const goldPrices = [
   { id: "bilezik", name: "22 Ayar Bilezik", buying: "6.630 ₺", selling: "7.277 ₺", discountSelling: "6.930 ₺", trend: "up" as const, icon: "📿" },
@@ -24,6 +24,16 @@ const navItems = [
 const Index = () => {
   const [updateTime, setUpdateTime] = useState("20.02.2026 03:57:01");
   const [isLive] = useState(true);
+  const [showSplash, setShowSplash] = useState(true);
+  const [contentReady, setContentReady] = useState(false);
+
+  useEffect(() => {
+    const splashTimer = setTimeout(() => {
+      setShowSplash(false);
+      setContentReady(true);
+    }, 2300);
+    return () => clearTimeout(splashTimer);
+  }, []);
 
   const handleRefresh = () => {
     const now = new Date();
@@ -35,68 +45,75 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Splash Screen */}
+      {showSplash && (
+        <div className="splash-screen fixed inset-0 z-50 bg-background flex flex-col items-center justify-center">
+          <div className="splash-logo text-5xl">🪙</div>
+          <h1 className="splash-text text-2xl font-bold gold-text font-serif mt-4 text-center px-8">
+            Amasya Kuyumcular<br />Altın Fiyatları
+          </h1>
+          <div className="splash-bar w-16 h-0.5 gold-gradient rounded-full mt-4" />
+        </div>
+      )}
+
       <div className="max-w-md mx-auto relative">
         <Header updateTime={updateTime} isLive={isLive} onRefresh={handleRefresh} />
 
-        <div className="pb-24 pt-3 space-y-4 px-4">
+        <div className={`pb-24 pt-3 space-y-4 px-4 ${contentReady ? '' : 'opacity-0'}`}>
           {/* Ad Banner */}
-          <AdBanner />
+          <div className={contentReady ? 'content-enter content-enter-delay-1' : ''}>
+            <AdBanner />
+          </div>
 
           {/* Price Table */}
-          <div className="rounded-2xl border border-gold/20 bg-card overflow-hidden shadow-lg">
-            {/* Table header */}
-            <div className="flex items-center px-3 py-2 bg-secondary/60 border-b border-gold/20">
-              <div className="w-[130px] shrink-0">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-1 h-3.5 gold-gradient rounded-full" />
-                  <span className="text-[10px] font-bold text-foreground tracking-wide uppercase">Tavsiye Fiyatları</span>
+          <div className={contentReady ? 'content-enter content-enter-delay-2' : ''}>
+            <div className="rounded-2xl border border-gold/20 bg-card overflow-hidden shadow-lg">
+              {/* Table header */}
+              <div className="flex items-center px-3 py-2 bg-secondary/60 border-b border-gold/20">
+                <div className="w-[130px] shrink-0">
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-1 h-3.5 gold-gradient rounded-full" />
+                    <span className="text-[10px] font-bold text-foreground tracking-wide uppercase">Tavsiye Fiyatları</span>
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 text-right flex-1">
+                  <span className="px-1 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Alış</span>
+                  <span className="px-1 text-[10px] font-semibold text-primary uppercase tracking-wider border-x border-gold/15">Satış</span>
+                  <span className="pl-1 text-[10px] font-semibold text-accent uppercase tracking-wider">İsk.</span>
                 </div>
               </div>
-              <div className="grid grid-cols-3 text-right flex-1">
-                <span className="px-1 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Alış</span>
-                <span className="px-1 text-[10px] font-semibold text-primary uppercase tracking-wider border-x border-gold/15">Satış</span>
-                <span className="pl-1 text-[10px] font-semibold text-accent uppercase tracking-wider">İsk.</span>
-              </div>
-            </div>
 
-            {/* Rows */}
-            {goldPrices.map((gold) => (
-              <GoldPriceCard key={gold.id} {...gold} />
-            ))}
+              {/* Rows */}
+              {goldPrices.map((gold) => (
+                <GoldPriceCard key={gold.id} {...gold} />
+              ))}
+            </div>
           </div>
 
           {/* Divider */}
-          <div className="flex items-center gap-3 px-1">
-            <div className="flex-1 h-px bg-gold/10" />
-            <Star size={10} className="text-primary/60" />
-            <div className="flex-1 h-px bg-gold/10" />
-          </div>
-
-          {/* Calculator promo */}
-          <div className="rounded-2xl border border-gold/20 bg-card p-4 flex items-center gap-4 hover:border-gold/40 transition-colors cursor-pointer">
-            <div className="w-9 h-9 rounded-xl gold-gradient flex items-center justify-center shrink-0">
-              <Calculator size={16} className="text-background" />
+          <div className={contentReady ? 'content-enter content-enter-delay-3' : ''}>
+            <div className="flex items-center gap-3 px-1">
+              <div className="flex-1 h-px bg-gold/10" />
+              <Star size={10} className="text-primary/60" />
+              <div className="flex-1 h-px bg-gold/10" />
             </div>
-            <div>
-              <h3 className="text-sm font-semibold text-foreground">Altın Hesap Makinesi</h3>
-              <p className="text-xs text-muted-foreground">Gram × fiyat → anında hesapla</p>
-            </div>
-            <div className="ml-auto text-muted-foreground/40 text-lg">›</div>
           </div>
 
           {/* Second ad slot */}
-          <div className="rounded-2xl border border-dashed border-gold/20 p-4 text-center bg-card/30 hover:bg-card/60 transition-colors cursor-pointer">
-            <p className="text-xs text-muted-foreground">📢 Reklam alanı</p>
-            <p className="text-[10px] text-primary/80 mt-0.5">Kuyumcu reklamınızı buraya ekletin</p>
+          <div className={contentReady ? 'content-enter content-enter-delay-3' : ''}>
+            <div className="rounded-2xl border border-dashed border-gold/20 p-4 text-center bg-card/30 hover:bg-card/60 transition-colors cursor-pointer">
+              <p className="text-xs text-muted-foreground">📢 Reklam alanı</p>
+              <p className="text-[10px] text-primary/80 mt-0.5">Kuyumcu reklamınızı buraya ekletin</p>
+            </div>
           </div>
 
           {/* Info note */}
-          <div className="rounded-xl bg-secondary/40 border border-gold/10 px-4 py-3">
-            <p className="text-[11px] text-muted-foreground leading-relaxed text-center">
+          <div className={contentReady ? 'content-enter content-enter-delay-4' : ''}>
+            <div className="rounded-xl bg-secondary/40 border border-gold/10 px-4 py-3">
+              <p className="text-[11px] text-muted-foreground leading-relaxed text-center">
               ⚠️ Fiyatlar bilgi amaçlıdır. Güncel fiyat için kuyumcunuza danışınız.
-              <br />
-              <span className="text-primary/80 font-medium">amasyakuyumculardernegi.com</span>
             </p>
+            </div>
           </div>
         </div>
 
