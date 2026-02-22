@@ -4,12 +4,12 @@ const SUPABASE_URL = "https://hnfgjzchlpdhektgnwwi.supabase.co/functions/v1/dyna
 
 export const useGoldPrices = () => {
   const [prices, setPrices] = useState([
-    { id: "bilezik", name: "22 Ayar Bilezik", buying: "...", selling: "...", discountSelling: "...", trend: "stable" as const, icon: "📿" },
-    { id: "gram", name: "24 Gram Altın", buying: "...", selling: "...", discountSelling: "...", trend: "stable" as const, icon: "🏅" },
-    { id: "ceyrek", name: "Çeyrek Altın", buying: "...", selling: "...", discountSelling: "...", trend: "stable" as const, icon: "🪙" },
+    { id: "bilezik", name: "22 Ayar Bilezik", buying: "...", selling: "...", discountSelling: "...", trend: "stable" as const, icon: "💰" },
+    { id: "gram", name: "24 Gram Altın", buying: "...", selling: "...", discountSelling: "...", trend: "stable" as const, icon: "💰" },
+    { id: "ceyrek", name: "Çeyrek Altın", buying: "...", selling: "...", discountSelling: "...", trend: "stable" as const, icon: "💰" },
     { id: "yarim", name: "Yarım Altın", buying: "...", selling: "...", discountSelling: "...", trend: "stable" as const, icon: "💰" },
-    { id: "lira", name: "Cumhuriyet Lirası", buying: "...", selling: "...", discountSelling: "...", trend: "stable" as const, icon: "🏆" },
-    { id: "arma", name: "Arma Altın", buying: "...", selling: "...", discountSelling: "...", trend: "stable" as const, icon: "⭐" },
+    { id: "lira", name: "Cumhuriyet Lirası", buying: "...", selling: "...", discountSelling: "...", trend: "stable" as const, icon: "💰" },
+    { id: "arma", name: "Arma Altın", buying: "...", selling: "...", discountSelling: "...", trend: "stable" as const, icon: "💰" },
   ]);
   const [updateTime, setUpdateTime] = useState("-");
   const [loading, setLoading] = useState(true);

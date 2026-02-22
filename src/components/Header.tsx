@@ -18,6 +18,15 @@ const Header = ({ updateTime, isLive, onRefresh }: HeaderProps) => {
     { label: "EURO", value: "...", change: "%0", positive: true },
   ]);
 
+  const [clock, setClock] = useState(new Date().toLocaleString("tr-TR"));
+
+  useEffect(() => {
+    const clockInterval = setInterval(() => {
+      setClock(new Date().toLocaleString("tr-TR"));
+    }, 1000);
+    return () => clearInterval(clockInterval);
+  }, []);
+
   useEffect(() => {
     const fetchTicker = () => {
       fetch(SUPABASE_URL)
@@ -45,9 +54,9 @@ const Header = ({ updateTime, isLive, onRefresh }: HeaderProps) => {
       <div className="px-4 pt-4 pb-2 flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold gold-text font-serif leading-tight">
-            Amasya Kuyumcular
+            Amasya Altın Fiyatları
           </h1>
-          <p className="text-[11px] text-muted-foreground">Sarraflar ve Kuyumcular Derneği</p>
+          <p className="text-[11px] text-muted-foreground">Amasya Kuyumcu Fiyatları</p>
         </div>
         <div className="flex items-center gap-2">
           <div className={`flex items-center gap-1 text-[10px] px-2 py-1 rounded-full border ${
@@ -80,7 +89,7 @@ const Header = ({ updateTime, isLive, onRefresh }: HeaderProps) => {
 
       <div className="px-4 pb-2">
         <p className="text-[10px] text-muted-foreground">
-          🕐 Son güncelleme: {updateTime}
+          🕐 {clock}
         </p>
       </div>
     </div>

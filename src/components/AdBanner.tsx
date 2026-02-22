@@ -1,49 +1,41 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import adBanner1 from "@/assets/ad-banner-1.jpg";
-import adBanner2 from "@/assets/ad-banner-2.jpg";
-import adBanner3 from "@/assets/ad-banner-3.jpg";
+
+const SUPABASE_URL = "https://hnfgjzchlpdhektgnwwi.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuZmdqemNobHBkaGVrdGdud3dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2MTQ5NjUsImV4cCI6MjA4NzE5MDk2NX0.Cip6QnuFBgWP6zfDODw1ZqwXKrY9dw2BRpui8mGZBBs";
 
 interface Ad {
   id: number;
-  image: string;
-  title: string;
-  subtitle: string;
-  phone?: string;
+  gorsel_url: string;
+  kuyumcu_adi: string;
 }
 
-const defaultAds: Ad[] = [
-  {
-    id: 1,
-    image: adBanner1,
-    title: "AMASYA GOLD",
-    subtitle: "Gelenekten gelen zarafet, modern tasarımla buluşuyor",
-    phone: "0358 XXX XX XX",
-  },
-  {
-    id: 2,
-    image: adBanner2,
-    title: "ÖRNEK KUYUMCU",
-    subtitle: "22 ve 24 Ayar Altın Koleksiyonu • Amasya Merkez",
-    phone: "0358 XXX XX XX",
-  },
-  {
-    id: 3,
-    image: adBanner3,
-    title: "ALTIN DÜNYASI",
-    subtitle: "Ziynet Altınları • Bilezik • Yüzük • Kolye",
-    phone: "0358 XXX XX XX",
-  },
-];
-
-interface AdBannerProps {
-  ads?: Ad[];
-}
-
-const AdBanner = ({ ads = defaultAds }: AdBannerProps) => {
+const AdBanner = () => {
+  const [ads, setAds] = useState<Ad[]>([]);
   const [current, setCurrent] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    fetch(`${SUPABASE_URL}/rest/v1/reklamlar?select=*`, {
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Authorization": `Bearer ${SUPABASE_KEY}`,
+        "Content-Type": "application/json"
+      }
+    })
+      .then(r => r.json())
+      .then(data => {
+        if (Array.isArray(data)) setAds(data);
+        setLoading(false);
+      })
+      .catch(e => {
+        console.error(e);
+        setLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (ads.length === 0) return;
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % ads.length);
     }, 4000);
@@ -53,58 +45,49 @@ const AdBanner = ({ ads = defaultAds }: AdBannerProps) => {
   const prev = () => setCurrent((c) => (c - 1 + ads.length) % ads.length);
   const next = () => setCurrent((c) => (c + 1) % ads.length);
 
+  if (loading) return (
+    <div className="rounded-2xl h-56 bg-card border border-gold/20 flex items-center justify-center">
+      <p className="text-xs text-muted-foreground">Yükleniyor...</p>
+    </div>
+  );
+
+  if (ads.length === 0 || !ads[current]) return null;
+
   const ad = ads[current];
 
   return (
-    <div className="rounded-2xl overflow-hidden relative border border-gold/25 card-glow">
-      {/* Label */}
+    <div className="rounded-2xl overflow-hidden relative border border-gold/25">
       <div className="absolute top-3 left-3 z-20">
         <span className="text-[10px] font-semibold uppercase tracking-widest bg-background/80 text-muted-foreground px-2 py-0.5 rounded-full backdrop-blur-sm border border-gold/20">
           Reklam
         </span>
       </div>
 
-      {/* Image */}
-      <div className="relative h-44 overflow-hidden">
+      <div className="relative h-56 overflow-hidden">
         <img
           key={ad.id}
-          src={ad.image}
-          alt={ad.title}
+          src={ad.gorsel_url}
+          alt={ad.kuyumcu_adi}
           className="w-full h-full object-cover transition-all duration-700"
         />
-        {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
       </div>
 
-      {/* Content */}
       <div className="absolute bottom-0 left-0 right-0 p-4">
         <div className="flex items-end justify-between">
           <div>
-            <h3 className="text-base font-bold gold-text font-serif">{ad.title}</h3>
-            <p className="text-xs text-muted-foreground mt-0.5 max-w-[220px]">{ad.subtitle}</p>
-            {ad.phone && (
-              <p className="text-xs text-accent font-medium mt-1">📞 {ad.phone}</p>
-            )}
+            <h3 className="text-base font-bold gold-text font-serif">{ad.kuyumcu_adi}</h3>
           </div>
-
-          {/* Nav arrows */}
           <div className="flex gap-1">
-            <button
-              onClick={prev}
-              className="w-7 h-7 rounded-full bg-background/70 border border-gold/30 flex items-center justify-center backdrop-blur-sm hover:bg-gold/20 transition-colors"
-            >
+            <button onClick={prev} className="w-7 h-7 rounded-full bg-background/70 border border-gold/30 flex items-center justify-center backdrop-blur-sm hover:bg-gold/20 transition-colors">
               <ChevronLeft size={14} className="text-foreground" />
             </button>
-            <button
-              onClick={next}
-              className="w-7 h-7 rounded-full bg-background/70 border border-gold/30 flex items-center justify-center backdrop-blur-sm hover:bg-gold/20 transition-colors"
-            >
+            <button onClick={next} className="w-7 h-7 rounded-full bg-background/70 border border-gold/30 flex items-center justify-center backdrop-blur-sm hover:bg-gold/20 transition-colors">
               <ChevronRight size={14} className="text-foreground" />
             </button>
           </div>
         </div>
 
-        {/* Dots */}
         <div className="flex gap-1.5 mt-3 justify-center">
           {ads.map((_, i) => (
             <button
