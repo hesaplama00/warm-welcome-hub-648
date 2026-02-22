@@ -59,7 +59,7 @@ const Index = () => {
 
           <div className="py-2">
             <p className="text-[9px] text-muted-foreground/50 text-center">
-              ⚠️ Fiyatlar bilgi amaçlıdır. amasyakuyumculardernegi.com
+              ⚠️ Fiyatlar bilgi amaçlıdır. amasyaaltinfiyatlari.com
             </p>
           </div>
         </div>
