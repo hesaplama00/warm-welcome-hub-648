@@ -1,4 +1,4 @@
-import { Home, BarChart2, Bell, Info, Phone, Mail, Globe } from "lucide-react";
+import { Home, BarChart2, Bell, Info, Mail, Globe } from "lucide-react";
 
 const navItems = [
   { icon: Home, label: "Ana Sayfa", active: false },
@@ -19,30 +19,48 @@ const Hakkinda = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
 
         <div className="px-4 pt-4 pb-24 space-y-4">
           <div className="rounded-2xl border border-gold/20 bg-card p-5">
-            <h2 className="text-sm font-bold text-foreground mb-1">Sarcontrol Bilişim</h2>
-            <p className="text-[11px] text-muted-foreground">Amasya Kuyumcular uygulamasının geliştiricisi</p>
+            <h2 className="text-sm font-bold text-foreground mb-1">
+              Sarcontrol Bilişim
+            </h2>
+            <p className="text-[11px] text-muted-foreground">
+              Amasya Kuyumcular uygulamasının geliştiricisi
+            </p>
           </div>
 
           <div className="rounded-2xl border border-gold/20 bg-card overflow-hidden">
             <div className="px-4 py-3 border-b border-gold/10">
-              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">İletişim</p>
+              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
+                İletişim
+              </p>
             </div>
-            <a href="tel:+905076662606" className="flex items-center gap-3 px-4 py-3 hover:bg-secondary/30 transition-colors border-b border-gold/10">
+
+            {/* MAIL */}
+            <a
+              href="mailto:woodenmy@gmail.com"
+              className="flex items-center gap-3 px-4 py-3 hover:bg-secondary/30 transition-colors border-b border-gold/10"
+            >
               <div className="w-8 h-8 rounded-full gold-gradient flex items-center justify-center shrink-0">
-                <Phone size={14} className="text-background" />
+                <Mail size={14} className="text-background" />
               </div>
               <div>
-                <p className="text-[10px] text-muted-foreground">Telefon</p>
-                <p className="text-sm font-medium text-foreground">+90 507 666 26 06</p>
+                <p className="text-[10px] text-muted-foreground">E-posta</p>
+                <p className="text-sm font-medium text-foreground">
+                  woodenmy@gmail.com
+
+                </p>
               </div>
             </a>
+
+            {/* WEBSITE */}
             <div className="flex items-center gap-3 px-4 py-3 hover:bg-secondary/30 transition-colors">
               <div className="w-8 h-8 rounded-full gold-gradient flex items-center justify-center shrink-0">
                 <Globe size={14} className="text-background" />
               </div>
               <div>
                 <p className="text-[10px] text-muted-foreground">Veri Kaynağı</p>
-                <p className="text-sm font-medium text-foreground">amasyakuyumculardernegi.com</p>
+                <p className="text-sm font-medium text-foreground">
+                  amasyakuyumculardernegi.com
+                </p>
               </div>
             </div>
           </div>
@@ -54,6 +72,7 @@ const Hakkinda = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
           </div>
         </div>
 
+        {/* BOTTOM NAV */}
         <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md z-30">
           <div className="bg-card/95 backdrop-blur-xl border-t border-gold/15 px-6 pt-3 pb-5">
             <div className="flex justify-around">
@@ -62,12 +81,21 @@ const Hakkinda = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
                   key={item.label}
                   onClick={() => onNavigate(item.label)}
                   className={`flex flex-col items-center gap-1 transition-colors ${
-                    item.active ? "text-primary" : "text-muted-foreground/50"
+                    item.active
+                      ? "text-primary"
+                      : "text-muted-foreground/50"
                   }`}
                 >
-                  <item.icon size={item.active ? 20 : 19} strokeWidth={item.active ? 2 : 1.5} />
-                  <span className="text-[9px] font-medium">{item.label}</span>
-                  {item.active && <div className="w-1 h-0.5 rounded-full bg-primary mt-0.5" />}
+                  <item.icon
+                    size={item.active ? 20 : 19}
+                    strokeWidth={item.active ? 2 : 1.5}
+                  />
+                  <span className="text-[9px] font-medium">
+                    {item.label}
+                  </span>
+                  {item.active && (
+                    <div className="w-1 h-0.5 rounded-full bg-primary mt-0.5" />
+                  )}
                 </button>
               ))}
             </div>
